@@ -1,4 +1,5 @@
 from datetime import UTC, datetime, timedelta
+from hashlib import sha256
 from uuid import UUID
 
 import jwt
@@ -43,3 +44,7 @@ def decode_access_token(token: str) -> str:
     if not isinstance(subject, str) or not subject:
         raise Unauthorized("Invalid token")
     return subject
+
+
+def hash_reset_token(token: str) -> str:
+    return sha256(token.encode()).hexdigest()

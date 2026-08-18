@@ -9,6 +9,9 @@ class UserPublic(BaseModel):
 
     id: UUID
     email: EmailStr
+    first_name: str
+    last_name: str
+    phone: str
     role: str
     is_active: bool
     created_at: datetime

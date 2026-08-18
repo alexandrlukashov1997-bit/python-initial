@@ -36,6 +36,9 @@ class Settings(BaseSettings):
     ] = [
         "http://localhost:4200",
     ]
+    mail_from: str = "noreply@localhost"
+    frontend_url: str = "http://localhost:4200/reset-password"
+    password_reset_expire_minutes: int = 60
 
     @property
     def sqlalchemy_database_url(self) -> str:

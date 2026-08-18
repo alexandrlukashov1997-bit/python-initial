@@ -9,7 +9,8 @@ from baseproject.db.base import Base
 
 
 class UserRole(StrEnum):
-    USER = "user"
+    CLIENT = "client"
+    SELLER = "seller"
     ADMIN = "admin"
 
 
@@ -19,10 +20,13 @@ class User(Base):
     id: Mapped[UUID] = mapped_column(primary_key=True, default=uuid4)
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
     hashed_password: Mapped[str] = mapped_column(String(255))
+    first_name: Mapped[str] = mapped_column(String(100))
+    last_name: Mapped[str] = mapped_column(String(100))
+    phone: Mapped[str] = mapped_column(String(32))
     role: Mapped[UserRole] = mapped_column(
         String(16),
-        default=UserRole.USER,
-        server_default=UserRole.USER.value,
+        default=UserRole.CLIENT,
+        server_default=UserRole.CLIENT.value,
     )
     is_active: Mapped[bool] = mapped_column(
         Boolean,

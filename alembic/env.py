@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from baseproject.core.asyncio_loop import selector_event_loop, use_selector_event_loop
 from baseproject.core.config import settings
 from baseproject.db.base import Base
+from baseproject.models import PasswordResetToken as _PasswordResetToken  # noqa: F401
 from baseproject.models import User as _User  # noqa: F401
 
 config = context.config

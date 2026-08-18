@@ -6,6 +6,7 @@ from fastapi import Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from baseproject.core.email import ConsoleEmailSender, EmailSender
 from baseproject.core.exceptions import Unauthorized
 from baseproject.core.security import decode_access_token
 from baseproject.db.session import async_session_maker
@@ -26,6 +27,13 @@ async def get_db() -> AsyncIterator[AsyncSession]:
 
 
 DbSession = Annotated[AsyncSession, Depends(get_db)]
+
+
+def get_email_sender() -> EmailSender:
+    return ConsoleEmailSender()
+
+
+EmailSenderDep = Annotated[EmailSender, Depends(get_email_sender)]
 
 
 async def get_current_user(

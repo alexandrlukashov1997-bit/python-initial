@@ -1,3 +1,5 @@
+import logging
+import sys
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
@@ -11,6 +13,16 @@ from baseproject.core.exceptions import AppError
 from baseproject.db.session import engine
 
 
+def configure_logging() -> None:
+    package_logger = logging.getLogger("baseproject")
+    package_logger.setLevel(logging.INFO)
+    if not package_logger.handlers:
+        handler = logging.StreamHandler(sys.stderr)
+        handler.setFormatter(logging.Formatter("%(levelname)s:     %(message)s"))
+        package_logger.addHandler(handler)
+    package_logger.propagate = False
+
+
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     yield
@@ -18,6 +30,7 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
 
 
 def create_app() -> FastAPI:
+    configure_logging()
     application = FastAPI(title="BaseProject", lifespan=lifespan)
     application.add_middleware(
         CORSMiddleware,

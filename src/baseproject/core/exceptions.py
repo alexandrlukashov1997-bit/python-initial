@@ -25,3 +25,10 @@ class Unauthorized(AppError):
 
     def __init__(self, message: str = "Unauthorized") -> None:
         super().__init__(message)
+
+
+class BadRequest(AppError):
+    status_code = 400
+
+    def __init__(self, message: str = "Bad request") -> None:
+        super().__init__(message)
