@@ -1,0 +1,27 @@
+class AppError(Exception):
+    status_code = 500
+
+    def __init__(self, message: str = "Internal server error") -> None:
+        self.message = message
+        super().__init__(message)
+
+
+class NotFound(AppError):
+    status_code = 404
+
+    def __init__(self, message: str = "Not found") -> None:
+        super().__init__(message)
+
+
+class Conflict(AppError):
+    status_code = 409
+
+    def __init__(self, message: str = "Conflict") -> None:
+        super().__init__(message)
+
+
+class Unauthorized(AppError):
+    status_code = 401
+
+    def __init__(self, message: str = "Unauthorized") -> None:
+        super().__init__(message)
