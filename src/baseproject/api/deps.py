@@ -7,10 +7,10 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from baseproject.core.email import ConsoleEmailSender, EmailSender
-from baseproject.core.exceptions import Unauthorized
+from baseproject.core.exceptions import Forbidden, Unauthorized
 from baseproject.core.security import decode_access_token
 from baseproject.db.session import async_session_maker
-from baseproject.models.user import User
+from baseproject.models.user import User, UserRole
 from baseproject.services import auth as auth_service
 
 bearer_scheme = HTTPBearer(auto_error=False)
@@ -53,3 +53,38 @@ async def get_current_user(
 
 
 CurrentUser = Annotated[User, Depends(get_current_user)]
+
+
+async def get_optional_current_user(
+    db: DbSession,
+    creds: Annotated[
+        HTTPAuthorizationCredentials | None,
+        Depends(bearer_scheme),
+    ],
+) -> User | None:
+    if creds is None or creds.scheme.lower() != "bearer":
+        return None
+    try:
+        user_id = UUID(decode_access_token(creds.credentials))
+    except ValueError:
+        return None
+    try:
+        return await auth_service.get_me(db, user_id)
+    except Unauthorized:
+        return None
+
+
+OptionalCurrentUser = Annotated[User | None, Depends(get_optional_current_user)]
+
+
+def require_roles(*roles: UserRole):
+    async def _require_roles(current_user: CurrentUser) -> User:
+        if current_user.role not in roles:
+            raise Forbidden("Insufficient permissions")
+        return current_user
+
+    return _require_roles
+
+
+CurrentSeller = Annotated[User, Depends(require_roles(UserRole.SELLER, UserRole.ADMIN))]
+CurrentAdmin = Annotated[User, Depends(require_roles(UserRole.ADMIN))]
