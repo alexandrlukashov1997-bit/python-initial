@@ -13,6 +13,8 @@ from baseproject.models import Car as _Car  # noqa: F401
 from baseproject.models import CarBrand as _CarBrand  # noqa: F401
 from baseproject.models import CarModel as _CarModel  # noqa: F401
 from baseproject.models import CarPhoto as _CarPhoto  # noqa: F401
+from baseproject.models import Order as _Order  # noqa: F401
+from baseproject.models import OrderItem as _OrderItem  # noqa: F401
 from baseproject.models import PasswordResetToken as _PasswordResetToken  # noqa: F401
 from baseproject.models import User as _User  # noqa: F401
 

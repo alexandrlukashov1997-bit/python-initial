@@ -9,6 +9,9 @@ from baseproject.models.car_enums import (
 )
 from baseproject.models.car_model import CarModel
 from baseproject.models.car_photo import CarPhoto
+from baseproject.models.order import Order
+from baseproject.models.order_enums import OrderStatus
+from baseproject.models.order_item import OrderItem
 from baseproject.models.password_reset_token import PasswordResetToken
 from baseproject.models.user import User, UserRole
 
@@ -21,6 +24,9 @@ __all__ = [
     "CarStatus",
     "DriveType",
     "EngineType",
+    "Order",
+    "OrderItem",
+    "OrderStatus",
     "PasswordResetToken",
     "TransmissionType",
     "User",
