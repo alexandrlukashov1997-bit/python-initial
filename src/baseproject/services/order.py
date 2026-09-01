@@ -1,3 +1,4 @@
+from datetime import UTC, datetime
 from decimal import Decimal
 from uuid import UUID, uuid4
 
@@ -288,6 +289,8 @@ async def update_order_status(
         await _revert_cars_published(db, items)
 
     order.status = new_status
+    if new_status == OrderStatus.COMPLETED:
+        order.completed_at = datetime.now(UTC)
     await db.flush()
     items = await _load_items(db, order.id)
     return _order_to_detail(order, items)
